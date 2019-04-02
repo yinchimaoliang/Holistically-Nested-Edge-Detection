@@ -18,7 +18,7 @@ class MAIN():
             groundtruth_files = os.listdir(self.groundtruth_path + '/' + i)
             with open(OUTPUT_PATH + '/' + i + '.txt','w') as f:
                 for j in range(len(image_files)):
-                    f.writelines('./images/' + i + '/' + image_files[j] + " " + './groundfiles/' + i + '/' + groundtruth_files[j])
+                    f.writelines('./Dataset/images/' + i + '/' + image_files[j] + " " + './Dataset/groundTruth/' + i + '/' + groundtruth_files[j])
                     f.write('\n')
 
 
