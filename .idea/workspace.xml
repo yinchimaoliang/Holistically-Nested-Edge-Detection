@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e29998c-777c-4ea5-9681-494eac718889" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dataset/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Dataset/test.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dataset/train.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Dataset/train.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dataset/val.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Dataset/val.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Generate TXT.py" beforeDir="false" afterPath="$PROJECT_DIR$/Generate TXT.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Training File.py" beforeDir="false" afterPath="$PROJECT_DIR$/Training File.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Training File.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="916">
-              <caret line="77" selection-start-line="77" selection-end-line="77" />
+            <state relative-caret-position="720">
+              <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -52,7 +47,7 @@
         <entry file="file://$PROJECT_DIR$/Dataset/test.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="32" lean-forward="true" selection-end-column="32" />
+              <caret column="32" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -119,7 +114,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../digit_recognition_pytorch" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -224,14 +219,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959038" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24959038" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3294979" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3294979" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -262,18 +258,15 @@
     <entry file="file://$PROJECT_DIR$/Dataset/BSDS500-master/BSDS500-master/BSDS500/data/images/val/8023.jpg" />
     <entry file="file://$PROJECT_DIR$/Dataset/BSDS500-master/BSDS500-master/BSDS500/data/images/val/12084.jpg" />
     <entry file="file://$PROJECT_DIR$/Dataset/BSDS500-master/BSDS500-master/BSDS500/data/images/val/14037.jpg" />
-    <entry file="file://$PROJECT_DIR$/Dataset/val.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Dataset/test.txt">
+    <entry file="file://$PROJECT_DIR$/Training File.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="32" lean-forward="true" selection-end-column="32" />
+        <state relative-caret-position="720">
+          <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Dataset/train.txt">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/temp.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -289,15 +282,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Training File.py">
+    <entry file="file://$PROJECT_DIR$/Dataset/test.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="916">
-          <caret line="77" selection-start-line="77" selection-end-line="77" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="32" selection-end-column="32" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dataset/train.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dataset/val.txt">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>

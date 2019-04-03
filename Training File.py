@@ -28,13 +28,12 @@ class MyDataset(Dataset):
 
     def __getitem__(self, index):
         img = cv.imread(self.img_lists[index])
-        img = cv.resize(img,(100,100),interpolation=cv.INTER_CUBIC)
-        img = img.reshape([3,100,100])
+        img = cv.resize(img,(224,224),interpolation=cv.INTER_CUBIC)
+        img = img.reshape([3,224,224])
         # img = img[np.newaxis, :, :, :]  # add dimention
 
         label = cv.imread(self.label_lists[index],0)
-        label = cv.resize(label,(100,100),interpolation=cv.INTER_CUBIC)
-        label = label.flatten()
+        label = cv.resize(label,(224,224),interpolation=cv.INTER_CUBIC)
         label = torch.from_numpy(label)
         label = label.type(torch.LongTensor)
         return img,label
@@ -49,9 +48,20 @@ class MyDataset(Dataset):
 class Net(nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1 = nn.Conv2d(in_channels = 3,out_channels = 10,kernel_size = 5,stride = 1,padding = 2)
-        self.mp = nn.MaxPool2d(kernel_size = 4)
-        self.fc = nn.Linear(25 * 25 * 10,10000)
+        self.conv1_1 = nn.Conv2d(in_channels = 3,out_channels = 64,kernel_size = 3,stride = 1,padding = 1)
+        self.conv1_2 = nn.Conv2d(in_channels = 64,out_channels = 64,kernel_size = 3,stride = 1,padding = 1)
+        self.conv2_1 = nn.Conv2d(in_channels = 64,out_channels = 128,kernel_size = 3,stride = 1,padding = 1)
+        self.conv2_2 = nn.Conv2d(in_channels = 128,out_channels = 128,kernel_size = 3,stride = 1,padding = 1)
+        self.conv3_1 = nn.Conv2d(in_channels = 128,out_channels = 256,kernel_size = 3,stride = 1,padding = 1)
+        self.conv3_2 = nn.Conv2d(in_channels = 256,out_channels = 256,kernel_size = 3,stride = 1,padding = 1)
+        self.conv3_3 = nn.Conv2d(in_channels = 256,out_channels = 256,kernel_size = 3,stride = 1,padding = 1)
+        self.conv4_1 = nn.Conv2d(in_channels = 256,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
+        self.conv4_2 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
+        self.conv4_3 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
+        self.conv5_1 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
+        self.conv5_2 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
+        self.conv5_3 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
+
 
     def forward(self, x):
         out = F.relu(self.mp(self.conv1(x)))
