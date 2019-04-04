@@ -10,8 +10,8 @@ import numpy as np
 
 TRAIN_PATH = './Dataset/train.txt'
 TEST_PATH = './Dataset/test.txt'
-BATCH_SIZE = 2
-EPOCH = 100
+BATCH_SIZE = 20
+EPOCH = 10
 
 
 
@@ -35,7 +35,7 @@ class MyDataset(Dataset):
         label = cv.imread(self.label_lists[index],0)
         label = cv.resize(label,(224,224),interpolation=cv.INTER_CUBIC)
         label = torch.from_numpy(label)
-        label = label.type(torch.LongTensor)
+        label = label.type(torch.FloatTensor)
         return img,label
 
 
@@ -119,15 +119,17 @@ class Main():
             output = self.net(data)
             # print(output.shape)
             # print(target.shape)
-            loss = nn.MSELoss(output, target)
+            loss_fn = nn.MSELoss(reduce=True, size_average=True)
+            loss = loss_fn(target,output)
             loss.backward()
+            # print(output)
             self.optimizer.step()
-            print(epoch)
+            print(epoch,loss)
 
 
     def main(self):
         self.net = Net().cuda()
-        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.001,momentum = 0.5)
+        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.00001,momentum = 0.5)
         for epoch in range(EPOCH):
             self.train(epoch)
 
