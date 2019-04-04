@@ -10,7 +10,7 @@ import numpy as np
 
 TRAIN_PATH = './Dataset/train.txt'
 TEST_PATH = './Dataset/test.txt'
-BATCH_SIZE = 10
+BATCH_SIZE = 2
 EPOCH = 100
 
 
@@ -61,14 +61,37 @@ class Net(nn.Module):
         self.conv5_1 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
         self.conv5_2 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
         self.conv5_3 = nn.Conv2d(in_channels = 512,out_channels = 512,kernel_size = 3,stride = 1,padding = 1)
-
+        self.mp = nn.MaxPool2d(kernel_size = 2,stride = 2)
+        self.up2 = nn.UpsamplingBilinear2d(scale_factor = 2)
+        self.up3 = nn.UpsamplingBilinear2d(scale_factor = 4)
+        self.up4 = nn.UpsamplingBilinear2d(scale_factor = 8)
+        self.up5 = nn.UpsamplingBilinear2d(scale_factor = 16)
 
     def forward(self, x):
-        out = F.relu(self.mp(self.conv1(x)))
-        out = out.view(BATCH_SIZE,-1)
+        x = F.relu(self.conv1_1(x))
+        s1 = F.relu(self.conv1_2(x))
+        x = self.mp(s1)
+        x = F.relu(self.conv2_1(x))
+        x = F.relu(self.conv2_2(x))
+        s2 = self.up2(x)
+        x = self.mp(x)
+        x = F.relu(self.conv3_1(x))
+        x = F.relu(self.conv3_2(x))
+        x = F.relu(self.conv3_3(x))
+        s3 = self.up3(x)
+        x = self.mp(x)
+        x = F.relu(self.conv4_1(x))
+        x = F.relu(self.conv4_2(x))
+        x = F.relu(self.conv4_3(x))
+        s4 = self.up4(x)
+        x = self.mp(x)
+        x = self.conv5_1(x)
+        x = self.conv5_2(x)
+        x = self.conv5_3(x)
+        s5 = self.up5(x)
         # print(out.shape)
-        out = self.fc(out)
-        return F.log_softmax(out)
+        print(s5.shape)
+        return s5
 
 
 
@@ -83,8 +106,8 @@ class Main():
             target = target.cuda()
             self.optimizer.zero_grad()
             output = self.net(data)
-            print(output.shape)
-            print(target.shape)
+            # print(output.shape)
+            # print(target.shape)
             loss = nn.MSELoss(output, target)
             loss.backward()
             self.optimizer.step()

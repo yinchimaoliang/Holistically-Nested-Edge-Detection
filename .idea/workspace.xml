@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Training File.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="720">
-              <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
+            <state relative-caret-position="900">
+              <caret line="108" column="31" selection-start-line="108" selection-start-column="31" selection-end-line="109" selection-end-column="33" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -222,12 +222,12 @@
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24959038" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959038" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3294979" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3294979" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -260,8 +260,8 @@
     <entry file="file://$PROJECT_DIR$/Dataset/BSDS500-master/BSDS500-master/BSDS500/data/images/val/14037.jpg" />
     <entry file="file://$PROJECT_DIR$/Training File.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
+        <state relative-caret-position="900">
+          <caret line="108" column="31" selection-start-line="108" selection-start-column="31" selection-end-line="109" selection-end-column="33" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
