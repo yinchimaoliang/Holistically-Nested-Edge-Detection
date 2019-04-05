@@ -12,7 +12,7 @@ TRAIN_PATH = './Dataset/train.txt'
 TEST_PATH = './Dataset/test.txt'
 BATCH_SIZE = 20
 EPOCH = 10
-
+EDGE_THRESHOLD = 128.0
 
 
 
@@ -35,6 +35,7 @@ class MyDataset(Dataset):
         label = cv.imread(self.label_lists[index],0)
         label = cv.resize(label,(224,224),interpolation=cv.INTER_CUBIC)
         label = torch.from_numpy(label)
+        label = torch.unsqueeze(label,0)
         label = label.type(torch.FloatTensor)
         return img,label
 
@@ -96,12 +97,12 @@ class Net(nn.Module):
         x = F.relu(self.conv4_3(x))
         s4 = self.up4(F.relu(self.conv4(x)))
         x = self.mp(x)
-        x = self.conv5_1(x)
-        x = self.conv5_2(x)
-        x = self.conv5_3(x)
+        x = F.relu(self.conv5_1(x))
+        x = F.relu(self.conv5_2(x))
+        x = F.relu(self.conv5_3(x))
         s5 = self.up5(F.relu(self.conv5(x)))
         s = self.s(torch.cat([s1,s2,s3,s4,s5],1))
-        print(s.shape)
+        # print(s.shape)
         return s
 
 
@@ -115,21 +116,59 @@ class Main():
         for step,(data,target) in enumerate(train_loader):
             data = data.type('torch.FloatTensor').cuda()
             target = target.cuda()
+            print(target.shape)
             self.optimizer.zero_grad()
             output = self.net(data)
+            batch_loss = sum([self.weighted_cross_entropy_loss(output, target) for preds in output])
+            eqv_iter_loss = batch_loss /10
+
+            # Generate the gradient and accumulate (using equivalent average loss).
+            eqv_iter_loss.backward()
+            # batch_loss.backward()
             # print(output.shape)
             # print(target.shape)
-            loss_fn = nn.MSELoss(reduce=True, size_average=True)
-            loss = loss_fn(target,output)
-            loss.backward()
+            # loss_fn = nn.MSELoss(reduce=True, size_average=True)
+            # loss = loss_fn(target,output)
+            # loss.backward()
             # print(output)
             self.optimizer.step()
-            print(epoch,loss)
+            print(epoch,batch_loss)
+
+
+    def weighted_cross_entropy_loss(self,preds, edges):
+        mask = (edges > EDGE_THRESHOLD).float()
+        b,c,h,w = mask.shape
+        num_pos = torch.sum(mask,dim = [1,2,3]).float()
+        # print(num_pos)
+        # print(num_pos.shape)
+        num_neg = c * h * w - num_pos
+        # print(num_neg)
+        weight = torch.zeros_like(mask)
+        # weight.cuda()
+        # print(weight)
+        w_neg = num_neg / (num_pos + num_neg)
+        w_pos = num_pos / (num_pos + num_neg)
+        for i in range(b):
+            for j in range(c):
+                for m in range(h):
+                    for n in range(w):
+                        # print(weight[i][j][m][n])
+                        if edges[i][j][m][n] > EDGE_THRESHOLD:
+
+                            weight[i][j][m][n] = w_neg[i]
+
+                        else:
+                            weight[i][j][m][n] = w_pos[i]
+        # weight[edges > EDGE_THRESHOLD] = num_neg / (num_pos + num_neg)
+        # weight[edges <= EDGE_THRESHOLD] = num_pos / (num_pos + num_neg)
+        losses = F.binary_cross_entropy(preds.float(),edges.float(),weight = weight,reduction = 'none')
+        loss = losses / b
+        return loss
 
 
     def main(self):
         self.net = Net().cuda()
-        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.00001,momentum = 0.5)
+        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.000001,momentum = 0.5)
         for epoch in range(EPOCH):
             self.train(epoch)
 
