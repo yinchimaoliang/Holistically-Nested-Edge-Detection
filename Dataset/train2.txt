@@ -1,0 +1,11 @@
+./Dataset/images/train/311081.jpg ./Dataset/groundTruth/train/311081.jpg
+./Dataset/images/train/178054.jpg ./Dataset/groundTruth/train/178054.jpg
+./Dataset/images/train/198023.jpg ./Dataset/groundTruth/train/198023.jpg
+./Dataset/images/train/232038.jpg ./Dataset/groundTruth/train/232038.jpg
+./Dataset/images/train/183055.jpg ./Dataset/groundTruth/train/183055.jpg
+./Dataset/images/train/71046.jpg ./Dataset/groundTruth/train/71046.jpg
+./Dataset/images/train/145053.jpg ./Dataset/groundTruth/train/145053.jpg
+./Dataset/images/train/100080.jpg ./Dataset/groundTruth/train/100080.jpg
+./Dataset/images/train/134052.jpg ./Dataset/groundTruth/train/134052.jpg
+./Dataset/images/train/27059.jpg ./Dataset/groundTruth/train/27059.jpg
+./Dataset/images/train/202012.jpg ./Dataset/groundTruth/train/202012.jpg

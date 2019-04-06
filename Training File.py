@@ -9,8 +9,8 @@ import numpy as np
 
 
 TRAIN_PATH = './Dataset/train.txt'
-TEST_PATH = './Dataset/test.txt'
-BATCH_SIZE = 20
+# TEST_PATH = './Dataset/test.txt'
+BATCH_SIZE = 2
 EPOCH = 10
 EDGE_THRESHOLD = 128.0
 
@@ -20,11 +20,20 @@ EDGE_THRESHOLD = 128.0
 class MyDataset(Dataset):
     def __init__(self,txt_path):
         with open(txt_path, 'r') as f:
-            lines = f.readlines()
-            self.img_lists = [i.split(" ")[0] for i in lines]
-            # print(self.img_lists)
-            self.label_lists = [i.split(" ")[1][:-1] for i in lines]
+            self.img_lists = []
+            self.label_lists = []
+            while True:
+                line = f.readline()
+                if not line:
+                    break
 
+                self.img_lists.append(line.split(" ")[0])
+                self.label_lists.append((line.split(" ")[1][:-1]))
+            # lines = f.readlines()
+            # self.img_lists = [i.split(" ")[0] for i in lines]
+            # # print(self.img_lists)
+            # self.label_lists = [i.split(" ")[1][:-1] for i in lines]
+        print(self.label_lists)
 
     def __getitem__(self, index):
         img = cv.imread(self.img_lists[index])
@@ -33,6 +42,7 @@ class MyDataset(Dataset):
         # img = img[np.newaxis, :, :, :]  # add dimention
 
         label = cv.imread(self.label_lists[index],0)
+        # print(index,label)
         label = cv.resize(label,(224,224),interpolation=cv.INTER_CUBIC)
         label = torch.from_numpy(label)
         label = torch.unsqueeze(label,0)
@@ -41,6 +51,7 @@ class MyDataset(Dataset):
 
 
     def __len__(self):
+        print(len(self.img_lists))
         return len(self.img_lists)
 
 
@@ -123,7 +134,7 @@ class Main():
             eqv_iter_loss = batch_loss /10
 
             # Generate the gradient and accumulate (using equivalent average loss).
-            eqv_iter_loss.backward()
+            eqv_iter_loss.backward(torch.ones_like(eqv_iter_loss))
             # batch_loss.backward()
             # print(output.shape)
             # print(target.shape)
@@ -161,7 +172,8 @@ class Main():
                             weight[i][j][m][n] = w_pos[i]
         # weight[edges > EDGE_THRESHOLD] = num_neg / (num_pos + num_neg)
         # weight[edges <= EDGE_THRESHOLD] = num_pos / (num_pos + num_neg)
-        losses = F.binary_cross_entropy(preds.float(),edges.float(),weight = weight,reduction = 'none')
+
+        losses = F.binary_cross_entropy_with_logits(preds.float(),edges.float(),weight = weight,reduction = 'none')
         loss = losses / b
         return loss
 
