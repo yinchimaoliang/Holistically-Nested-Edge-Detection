@@ -1,0 +1,2 @@
+./Dataset/images/test/232076.jpg ./Dataset/groundTruth/test/232076.jpg
+./Dataset/images/test/249021.jpg ./Dataset/groundTruth/test/249021.jpg

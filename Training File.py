@@ -8,8 +8,9 @@ import cv2 as cv
 import numpy as np
 
 
-TRAIN_PATH = './Dataset/train.txt'
-# TEST_PATH = './Dataset/test.txt'
+TRAIN_PATH = './Dataset/train2.txt'
+TEST_PATH = './Dataset/test2.txt'
+TEST_SAVE_PATH = './Test'
 BATCH_SIZE = 2
 EPOCH = 10
 EDGE_THRESHOLD = 128.0
@@ -26,9 +27,13 @@ class MyDataset(Dataset):
                 line = f.readline()
                 if not line:
                     break
-
-                self.img_lists.append(line.split(" ")[0])
-                self.label_lists.append((line.split(" ")[1][:-1]))
+                img = line.split(" ")[0]
+                self.img_lists.append(img)
+                label = line.split(" ")[1]
+                if label[-1] == '\n':
+                    self.label_lists.append(label[:-1])
+                else:
+                    self.label_lists.append(label)
             # lines = f.readlines()
             # self.img_lists = [i.split(" ")[0] for i in lines]
             # # print(self.img_lists)
@@ -122,7 +127,7 @@ class Net(nn.Module):
 class Main():
     def train(self,epoch):
         train_dataset = MyDataset(TRAIN_PATH)
-        train_loader = DataLoader(dataset = train_dataset,batch_size = BATCH_SIZE,shuffle = True)
+        train_loader = DataLoader(dataset = train_dataset,batch_size = BATCH_SIZE,shuffle = False)
 
         for step,(data,target) in enumerate(train_loader):
             data = data.type('torch.FloatTensor').cuda()
@@ -144,6 +149,19 @@ class Main():
             # print(output)
             self.optimizer.step()
             print(epoch,batch_loss)
+            self.test()
+
+    def test(self):
+        test_dataset = MyDataset(TEST_PATH)
+        test_loader = DataLoader(dataset = test_dataset,batch_size = BATCH_SIZE,shuffle = False)
+        for step,(data,target) in enumerate(test_loader):
+            data = data.type('torch.FloatTensor').cuda()
+            output = self.net(data)
+            output = output.cpu().data
+            print("test")
+            print(output.shape,target.shape)
+            print(output,target)
+            # cv.imwrite(TEST_SAVE_PATH + '/' + str(step) + '.jpg',output)
 
 
     def weighted_cross_entropy_loss(self,preds, edges):
