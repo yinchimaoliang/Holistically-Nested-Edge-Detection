@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5e29998c-777c-4ea5-9681-494eac718889" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dataset/train2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Dataset/train2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test Result/00.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Test Result/00.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Training File.py" beforeDir="false" afterPath="$PROJECT_DIR$/Training File.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Training File.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="183" column="28" lean-forward="true" selection-start-line="183" selection-start-column="28" selection-end-line="183" selection-end-column="28" />
+            <state relative-caret-position="3212">
+              <caret line="216" column="73" lean-forward="true" selection-start-line="216" selection-start-column="73" selection-end-line="216" selection-end-column="73" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -28,6 +28,11 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Test Result/00.jpg">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Dataset/groundTruth/train/311081.jpg">
           <provider selected="true" editor-type-id="images" />
         </entry>
       </file>
@@ -66,11 +71,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Test Result/17.jpg">
-          <provider selected="true" editor-type-id="images" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Test Result/14.jpg">
           <provider selected="true" editor-type-id="images" />
         </entry>
@@ -83,6 +83,11 @@
         <option value="Python Script" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>print</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -121,6 +126,12 @@
               <item name="Holistically-Nested Edge Detection" type="b2602c69:ProjectViewProjectNode" />
               <item name="Holistically-Nested Edge Detection" type="462c0819:PsiDirectoryNode" />
               <item name="Dataset" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Holistically-Nested Edge Detection" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Holistically-Nested Edge Detection" type="462c0819:PsiDirectoryNode" />
+              <item name="Dataset" type="462c0819:PsiDirectoryNode" />
+              <item name="groundTruth" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Holistically-Nested Edge Detection" type="b2602c69:ProjectViewProjectNode" />
@@ -247,13 +258,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959038" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24959038" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49972692" weight="0.3294979" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49535772" visible="true" weight="0.3294979" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49535772" visible="true" weight="0.3294979" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -268,9 +280,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Dataset/groundTruth/test/41006.jpg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Test Result/15.jpg">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -413,10 +422,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Test Result/01.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/Dataset/images/train/311081.jpg">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Test Result/01.jpg">
+    <entry file="file://$PROJECT_DIR$/Dataset/groundTruth/train/311081.jpg">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Test Result/00.jpg">
@@ -424,8 +436,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Training File.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="183" column="28" lean-forward="true" selection-start-line="183" selection-start-column="28" selection-end-line="183" selection-end-column="28" />
+        <state relative-caret-position="3212">
+          <caret line="216" column="73" lean-forward="true" selection-start-line="216" selection-start-column="73" selection-end-line="216" selection-end-column="73" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>

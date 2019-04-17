@@ -154,8 +154,8 @@ class Main():
             eqv_iter_loss = batch_loss /10
             print('loss',batch_loss)
             # Generate the gradient and accumulate (using equivalent average loss).
-            # eqv_iter_loss.backward(torch.ones_like(eqv_iter_loss))
-            batch_loss.backward()
+            eqv_iter_loss.backward(torch.ones_like(eqv_iter_loss))
+            # eqv_iter_loss.backward()
             # print(output.shape)
             # print(target.shape)
             # loss_fn = nn.MSELoss(reduce=True, size_average=True)
@@ -180,7 +180,7 @@ class Main():
                 img = output[j]
                 img *= 255
                 img = img.reshape((224,224,1))
-                # print(img)
+                print(img)
                 cv.imwrite(TEST_SAVE_PATH + '/' + str(step) + str(j) + '.jpg',img)
 
 
@@ -202,10 +202,10 @@ class Main():
                         # print(weight[i][j][m][n])
                         if edges[i][j][m][n] > EDGE_THRESHOLD:
 
-                            weight[i][j][m][n] = w_neg
+                            weight[i][j][m][n] = w_pos
 
                         else:
-                            weight[i][j][m][n] = w_pos
+                            weight[i][j][m][n] = w_neg
 
         losses = F.binary_cross_entropy_with_logits(preds.float(),edges.float(),weight = weight,reduction = 'none')
         loss = losses / b
@@ -214,7 +214,7 @@ class Main():
 
     def main(self):
         self.net = Net().cuda()
-        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.001,momentum = 0.9)
+        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.0001,momentum = 0.9)
         for epoch in range(EPOCH):
             self.train(epoch)
 
