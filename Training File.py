@@ -1,7 +1,9 @@
 import torch
 import torch.nn as nn
+from PIL import Image
 import torchvision
 import torch.nn.functional as F
+import torchvision.transforms as tfs
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 import cv2 as cv
@@ -9,11 +11,11 @@ import numpy as np
 
 
 TRAIN_PATH = './Dataset/train2.txt'
-TEST_PATH = './Dataset/test2.txt'
-TEST_SAVE_PATH = './Test'
-BATCH_SIZE = 2
-EPOCH = 10
-EDGE_THRESHOLD = 128.0
+TEST_PATH = './Dataset/train2.txt'
+TEST_SAVE_PATH = './Test Result'
+BATCH_SIZE = 1
+EPOCH = 100
+EDGE_THRESHOLD = 0.5
 
 
 
@@ -34,29 +36,43 @@ class MyDataset(Dataset):
                     self.label_lists.append(label[:-1])
                 else:
                     self.label_lists.append(label)
-            # lines = f.readlines()
-            # self.img_lists = [i.split(" ")[0] for i in lines]
-            # # print(self.img_lists)
-            # self.label_lists = [i.split(" ")[1][:-1] for i in lines]
         print(self.label_lists)
+    def imgTransforms(self,img,label):
+        img_tfs = tfs.Compose([
+            tfs.ToTensor(),  # [0-255]--->[0-1]
+            tfs.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            # 均值方差。Normalize之后，神经网络在训练的过程中，梯度对每一张图片的作用都是平均的，也就是不存在比例不匹配的情况
+        ])
+        img = img_tfs(img)
 
+        # label = self.image2label(label)
+        # label = torch.from_numpy(label)
+        label = torch.from_numpy(np.array(label) / 255.0)
+        label = torch.unsqueeze(label, 0)
+        return img, label
     def __getitem__(self, index):
-        img = cv.imread(self.img_lists[index])
-        img = cv.resize(img,(224,224),interpolation=cv.INTER_CUBIC)
-        img = img.reshape([3,224,224])
+        img = Image.open(self.img_lists[index]).resize((224,224))
+        # img = cv.imread(self.img_lists[index])
+        label = Image.open(self.label_lists[index]).convert('L').resize((224,224))
         # img = img[np.newaxis, :, :, :]  # add dimention
 
-        label = cv.imread(self.label_lists[index],0)
-        # print(index,label)
-        label = cv.resize(label,(224,224),interpolation=cv.INTER_CUBIC)
-        label = torch.from_numpy(label)
-        label = torch.unsqueeze(label,0)
-        label = label.type(torch.FloatTensor)
+        # label = cv.imread(self.label_lists[index],0)
+        # # print(index,label)
+        # label = cv.resize(label,(224,224),interpolation=cv.INTER_CUBIC)
+        img, label = self.imgTransforms(img, label)
+        # print(img)
+        # print(label)
+        # img = img[np.newaxis, :, :, :]  # add dimention
+        # label = torch.from_numpy(label)
+        # label = torch.unsqueeze(label,0)
+        # label = label.type(torch.FloatTensor)
+        # img = torch.from_numpy(img)
+        # img = img.type(torch.FloatTensor)
         return img,label
 
 
     def __len__(self):
-        print(len(self.img_lists))
+        # print(len(self.img_lists))
         return len(self.img_lists)
 
 
@@ -132,15 +148,14 @@ class Main():
         for step,(data,target) in enumerate(train_loader):
             data = data.type('torch.FloatTensor').cuda()
             target = target.cuda()
-            print(target.shape)
             self.optimizer.zero_grad()
             output = self.net(data)
             batch_loss = sum([self.weighted_cross_entropy_loss(output, target) for preds in output])
             eqv_iter_loss = batch_loss /10
-
+            print('loss',batch_loss)
             # Generate the gradient and accumulate (using equivalent average loss).
-            eqv_iter_loss.backward(torch.ones_like(eqv_iter_loss))
-            # batch_loss.backward()
+            # eqv_iter_loss.backward(torch.ones_like(eqv_iter_loss))
+            batch_loss.backward()
             # print(output.shape)
             # print(target.shape)
             # loss_fn = nn.MSELoss(reduce=True, size_average=True)
@@ -148,20 +163,25 @@ class Main():
             # loss.backward()
             # print(output)
             self.optimizer.step()
-            print(epoch,batch_loss)
+            # print(epoch)
             self.test()
 
     def test(self):
-        test_dataset = MyDataset(TEST_PATH)
+        test_dataset = MyDataset(TRAIN_PATH)
         test_loader = DataLoader(dataset = test_dataset,batch_size = BATCH_SIZE,shuffle = False)
         for step,(data,target) in enumerate(test_loader):
             data = data.type('torch.FloatTensor').cuda()
             output = self.net(data)
-            output = output.cpu().data
-            print("test")
-            print(output.shape,target.shape)
-            print(output,target)
-            # cv.imwrite(TEST_SAVE_PATH + '/' + str(step) + '.jpg',output)
+            output = output.cpu().data.numpy()
+            # print("test")
+            # print(output.shape,target.shape)
+            # print(output,target)
+            for j in range(BATCH_SIZE):
+                img = output[j]
+                img *= 255
+                img = img.reshape((224,224,1))
+                # print(img)
+                cv.imwrite(TEST_SAVE_PATH + '/' + str(step) + str(j) + '.jpg',img)
 
 
     def weighted_cross_entropy_loss(self,preds, edges):
@@ -169,14 +189,12 @@ class Main():
         b,c,h,w = mask.shape
         num_pos = torch.sum(mask,dim = [1,2,3]).float()
         # print(num_pos)
-        # print(num_pos.shape)
+
         num_neg = c * h * w - num_pos
         # print(num_neg)
         weight = torch.zeros_like(mask)
-        # weight.cuda()
-        # print(weight)
-        w_neg = num_neg / (num_pos + num_neg)
-        w_pos = num_pos / (num_pos + num_neg)
+        w_neg = num_pos / (num_pos + num_neg)
+        w_pos = num_neg / (num_pos + num_neg)
         for i in range(b):
             for j in range(c):
                 for m in range(h):
@@ -184,12 +202,10 @@ class Main():
                         # print(weight[i][j][m][n])
                         if edges[i][j][m][n] > EDGE_THRESHOLD:
 
-                            weight[i][j][m][n] = w_neg[i]
+                            weight[i][j][m][n] = w_neg
 
                         else:
-                            weight[i][j][m][n] = w_pos[i]
-        # weight[edges > EDGE_THRESHOLD] = num_neg / (num_pos + num_neg)
-        # weight[edges <= EDGE_THRESHOLD] = num_pos / (num_pos + num_neg)
+                            weight[i][j][m][n] = w_pos
 
         losses = F.binary_cross_entropy_with_logits(preds.float(),edges.float(),weight = weight,reduction = 'none')
         loss = losses / b
@@ -198,7 +214,7 @@ class Main():
 
     def main(self):
         self.net = Net().cuda()
-        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.000001,momentum = 0.5)
+        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.001,momentum = 0.9)
         for epoch in range(EPOCH):
             self.train(epoch)
 

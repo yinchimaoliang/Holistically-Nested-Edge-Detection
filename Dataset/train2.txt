@@ -1,2 +1,1 @@
 ./Dataset/images/train/311081.jpg ./Dataset/groundTruth/train/311081.jpg
-./Dataset/images/train/178054.jpg ./Dataset/groundTruth/train/178054.jpg
