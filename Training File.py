@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from PIL import Image
-import torchvision
+torch.nn.init.xavier_normal
 import torch.nn.functional as F
 import torchvision.transforms as tfs
 from torch.utils.data import DataLoader
@@ -16,7 +16,7 @@ TEST_SAVE_PATH = './Test Result'
 BATCH_SIZE = 1
 EPOCH = 100
 EDGE_THRESHOLD = 0.5
-
+LEARNING_RATE = 0.00001
 
 
 
@@ -135,7 +135,7 @@ class Net(nn.Module):
         s5 = self.up5(F.relu(self.conv5(x)))
         s = self.s(torch.cat([s1,s2,s3,s4,s5],1))
         # print(s.shape)
-        return s
+        return s1,s2,s3,s4,s5,s
 
 
 
@@ -149,10 +149,15 @@ class Main():
             data = data.type('torch.FloatTensor').cuda()
             target = target.cuda()
             self.optimizer.zero_grad()
-            output = self.net(data)
-            batch_loss = sum([self.weighted_cross_entropy_loss(output, target) for preds in output])
-            eqv_iter_loss = batch_loss /10
-            print('loss',batch_loss)
+            s1,s2,s3,s4,s5,output = self.net(data)
+            s1_batch_loss = sum([self.weighted_cross_entropy_loss(s1, target) for preds in s1])
+            s2_batch_loss = sum([self.weighted_cross_entropy_loss(s2, target) for preds in s2])
+            s3_batch_loss = sum([self.weighted_cross_entropy_loss(s3, target) for preds in s3])
+            s4_batch_loss = sum([self.weighted_cross_entropy_loss(s4, target) for preds in s4])
+            s5_batch_loss = sum([self.weighted_cross_entropy_loss(s5, target) for preds in s5])
+            output_batch_loss = sum([self.weighted_cross_entropy_loss(output, target) for preds in output])
+            eqv_iter_loss = (output_batch_loss + s1_batch_loss + s2_batch_loss + s3_batch_loss + s4_batch_loss + s5_batch_loss)/(EPOCH * 6)
+            print('loss',output_batch_loss)
             # Generate the gradient and accumulate (using equivalent average loss).
             eqv_iter_loss.backward(torch.ones_like(eqv_iter_loss))
             # eqv_iter_loss.backward()
@@ -171,7 +176,7 @@ class Main():
         test_loader = DataLoader(dataset = test_dataset,batch_size = BATCH_SIZE,shuffle = False)
         for step,(data,target) in enumerate(test_loader):
             data = data.type('torch.FloatTensor').cuda()
-            output = self.net(data)
+            s1,s2,s3,s4,s5,output = self.net(data)
             output = output.cpu().data.numpy()
             # print("test")
             # print(output.shape,target.shape)
@@ -182,6 +187,7 @@ class Main():
                 img = img.reshape((224,224,1))
                 print(img)
                 cv.imwrite(TEST_SAVE_PATH + '/' + str(step) + str(j) + '.jpg',img)
+
 
 
     def weighted_cross_entropy_loss(self,preds, edges):
@@ -213,8 +219,12 @@ class Main():
 
 
     def main(self):
+        def weights_init(m):
+            if isinstance(m, nn.Conv2d):
+                torch.nn.init.xavier_uniform_(m.weight, gain=1)
         self.net = Net().cuda()
-        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = 0.0001,momentum = 0.9)
+        # self.net.apply(weights_init)
+        self.optimizer = torch.optim.SGD(self.net.parameters(),lr = LEARNING_RATE,momentum = 0.9)
         for epoch in range(EPOCH):
             self.train(epoch)
 
